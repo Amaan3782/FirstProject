@@ -17,7 +17,12 @@
 
     <EditText
         android:textColorHint="@color/white_trans"
+        android:background="@drawable/custom_border"
+        android:drawableLeft="@drawable/baseline_mail_24"
+        android:drawablePadding="10dp"
         android:inputType="textEmailAddress"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="20dp"
         android:layout_marginTop="50dp"
         android:layout_marginHorizontal="20dp"
         android:id="@+id/email"
@@ -28,6 +33,11 @@
         />
 
     <EditText
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="20dp"
+        android:background="@drawable/custom_border"
+        android:drawableLeft="@drawable/lock"
+        android:drawablePadding="10dp"
         android:textColorHint="@color/white_trans"
         android:inputType="textPassword"
         android:layout_marginTop="20dp"
@@ -38,5 +48,53 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
+    <CheckBox
+        android:id="@+id/remember"
+        android:layout_below="@id/password"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:buttonTint="@color/white_trans"
+        android:textColor="@color/white_trans"
+        android:text="Remember Me"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:id="@+id/login"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:text="Log In"
+        android:backgroundTint="@color/white"
+        android:textColor="#FE3837"
+        android:layout_below="@id/remember"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:id="@+id/signup"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:text="Sign Up"
+        android:backgroundTint="@color/white"
+        android:textColor="#FE3837"
+        android:layout_below="@id/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    
+    <TextView
+        android:layout_below="@id/signup"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Forget Your Password?"
+        android:textColor="@color/white_trans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+
 
 </RelativeLayout>
