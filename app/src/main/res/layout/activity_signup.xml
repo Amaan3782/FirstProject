@@ -115,16 +115,41 @@
             android:layout_height="wrap_content"
             />
         </RadioGroup>
+
+        <TextView
+            android:id="@+id/signup_select_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/signup_gender"
+            android:layout_marginLeft="@dimen/_18sdp"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:text="Select City:"
+            android:textColor="@color/white_trans"
+            android:textSize="@dimen/_15sdp"
+            />
         
         <Spinner
             android:id="@+id/signup_city"
-            android:background="@drawable/custom_button_white"
+            android:background="@drawable/custom_spinner"
             android:popupBackground="@drawable/custom_background"
             android:layout_marginTop="@dimen/_18sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/signup_gender"
+            android:layout_below="@id/signup_select_city"
             android:layout_marginHorizontal="@dimen/_18sdp"
+            />
+
+        <EditText
+            style="@style/edit_15"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:drawableLeft="@drawable/calender_icon"
+            android:inputType="textPersonName"
+            android:id="@+id/signup_dob"
+            android:hint="Date of Birth"
+            android:layout_below="@id/signup_city"
+            android:editable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             />
 
         <Button
@@ -136,7 +161,7 @@
             app:backgroundTint="@null"
             android:background="@drawable/custom_button_white"
             android:textColor="#F47920"
-            android:layout_below="@id/signup_city"
+            android:layout_below="@id/signup_dob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -154,8 +179,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
-
-
 
     </RelativeLayout>
 

@@ -2,28 +2,35 @@ package com.example.firstproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class SignupActivity extends AppCompatActivity {
 
     Button login, signup;
     RadioGroup gender;
     Spinner city;
-    //String[] cityArray = {"Ahmedabad", "Gandhinagar"};
     ArrayList<String> arrayList;
-    EditText name, phone, email, password, confirmPassword;
+    Calendar calendar;
+    EditText name, phone, email, password, confirmPassword, dob;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$";
+    String sCity = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,34 @@ public class SignupActivity extends AppCompatActivity {
         gender = findViewById(R.id.signup_gender);
 
         city = findViewById(R.id.signup_city);
+
+        dob = findViewById(R.id.signup_dob);
+
+        calendar = Calendar.getInstance();
+
+        DatePickerDialog.OnDateSetListener dateClick = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                calendar.set(Calendar.YEAR,i);
+                calendar.set(Calendar.MONTH,i1);
+                calendar.set(Calendar.DAY_OF_MONTH,i2);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                dob.setText(sdf.format(calendar.getTime()));
+
+            }
+        };
+
+        dob.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(SignupActivity.this,dateClick,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+                //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                datePickerDialog.show();
+                return true;
+            }
+        });
 
         arrayList = new ArrayList<>();
         arrayList.add("Select City");
@@ -64,9 +99,10 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i==0) {
-
+                    sCity = "";
                 } else {
-                    new CommonMethods(SignupActivity.this, arrayList.get(i));
+                    sCity = arrayList.get(i);
+                    new CommonMethods(SignupActivity.this, sCity);
                 }
             }
 
@@ -108,6 +144,12 @@ public class SignupActivity extends AppCompatActivity {
                     confirmPassword.setError("Min, 6 Char Password Required!");
                 } else if (!confirmPassword.getText().toString().trim().matches(password.getText().toString().trim())) {
                      confirmPassword.setError("Password Does Not Match!");
+                } else if (gender.getCheckedRadioButtonId() == -1) {
+                    new CommonMethods(SignupActivity.this,"Please Select Gender");
+                } else if (sCity.equals("")) {
+                    new CommonMethods(SignupActivity.this,"Please Select City");
+                } else if (dob.getText().toString().trim().equals("")) {
+                    dob.setError("Please Select Date Of Birth");
                 } else {
                     System.out.println("Signup Successfully!");
                     new CommonMethods(SignupActivity.this, "Signup Successfully!");
