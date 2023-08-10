@@ -3,6 +3,8 @@ package com.example.firstproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,18 +29,24 @@ public class SignupActivity extends AppCompatActivity {
     Spinner city;
     ArrayList<String> arrayList;
     Calendar calendar;
-    EditText name, phone, email, password, confirmPassword, dob;
+    EditText name, contact, email, password, confirmPassword, dob;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$";
     String sCity = "";
+    String sGender;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        db = openOrCreateDatabase("FirstProject",MODE_PRIVATE,null);
+        String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT, NAME VARCHAR(100),EMAIL VARCHAR(100),CONTACT INT(10),PASSWORD VARCHAR(20),GENDER VARCHAR(5),CITY VARCHAR(50),DOB VARCHAR(10))";
+        db.execSQL(tableQuery);
+
         name = findViewById(R.id.signup_name);
-        phone = findViewById(R.id.signup_phone);
+        contact = findViewById(R.id.signup_contact);
         email = findViewById(R.id.signup_email);
         password = findViewById(R.id.signup_password);
         confirmPassword = findViewById(R.id.signup_confirmPassword);
@@ -91,7 +99,8 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton radioButton = findViewById(i);
-                new CommonMethods(SignupActivity.this,radioButton.getText().toString());
+                sGender = radioButton.getText().toString();
+                new CommonMethods(SignupActivity.this, sGender);
             }
         });
 
@@ -128,10 +137,10 @@ public class SignupActivity extends AppCompatActivity {
                     email.setError("Email Id Required!");
                 } else if(!email.getText().toString().trim().matches(emailPattern)){
                     email.setError("Valid Email Id Required!");
-                } else if (phone.getText().toString().trim().equals("")) {
-                    phone.setError("Phone Number Is Required!");
-                } else if (phone.getText().toString().length()<10) {
-                    phone.setError("Phone Number Must Be 10 Digit!");
+                } else if (contact.getText().toString().trim().equals("")) {
+                    contact.setError("contact Number Is Required!");
+                } else if (contact.getText().toString().length()<10) {
+                    contact.setError("contact Number Must Be 10 Digit!");
                 } else if (password.getText().toString().equals("")) {
                     password.setError("Password Required!");
                 } else if (!password.getText().toString().matches(passwordPattern)) {
@@ -151,9 +160,18 @@ public class SignupActivity extends AppCompatActivity {
                 } else if (dob.getText().toString().trim().equals("")) {
                     dob.setError("Please Select Date Of Birth");
                 } else {
-                    System.out.println("Signup Successfully!");
-                    new CommonMethods(SignupActivity.this, "Signup Successfully!");
-                    onBackPressed();
+                    String selectQuery = "SELECT * FROM USERS WHERE EMAIL='"+email.getText().toString()+"' OR '"+contact.getText().toString()+"'";
+                    Cursor cursor = db.rawQuery(selectQuery,null);
+                    if(cursor.getCount() > 0){
+                        new CommonMethods(SignupActivity.this,"Email Or contact Dose Not Match");
+                    }else {
+                        String insertQuery = "INSERT INTO USERS VALUES(NULL,'" + name.getText().toString() + "','" + email.getText().toString() + "','" + contact.getText().toString() + "','" + password.getText().toString() + "','" + sGender + "','" + sGender + "','" + dob.getText().toString() + "')";
+                        db.execSQL(insertQuery);
+
+                        new CommonMethods(SignupActivity.this, "Signup Successfully!");
+                        new CommonMethods(view,"Login Successfully");
+                        onBackPressed();
+                    }
                 }
             }
         });
